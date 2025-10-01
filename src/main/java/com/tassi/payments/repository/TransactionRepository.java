@@ -7,10 +7,10 @@ import org.springframework.stereotype.Repository;
 
 import com.tassi.payments.model.Transaction;
 
+
 @Repository
 public interface TransactionRepository extends JpaRepository<Transaction, Long> {
-    
-    List<Transaction> findByAccountIdOrderByTransactionDateDesc(Long accountId);
 
-   
+    List<Transaction> findByAccountIdAccountOrderByTransactionDateDesc(Long accountId);
+
 }

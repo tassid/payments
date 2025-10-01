@@ -1,18 +1,19 @@
 package com.tassi.payments.service.impl;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.tassi.payments.model.Account;
 import com.tassi.payments.model.Person;
 import com.tassi.payments.model.Transaction;
 import com.tassi.payments.repository.AccountRepository;
-import com.tassi.payments.repository.TransactionRepository;
 import com.tassi.payments.repository.PersonRepository;
+import com.tassi.payments.repository.TransactionRepository;
 import com.tassi.payments.service.AccountService;
-
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.util.List;
 
 @Service
 public class AccountServiceImpl implements AccountService {
@@ -136,10 +137,10 @@ public class AccountServiceImpl implements AccountService {
         return accountRepository.save(account);
     }
 
-    // transaction statement
+    // transaction history
     @Override
     public List<Transaction> getStatement(Long accountId) {
-    
-        return transactionRepository.findByAccountIdOrderByTransactionDateDesc(accountId);
+     return transactionRepository.findByAccountIdAccountOrderByTransactionDateDesc(accountId);
     }
+
 }
