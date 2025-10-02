@@ -133,14 +133,29 @@ public class AccountServiceImpl implements AccountService {
              throw new IllegalStateException("Account is already blocked.");
         }
 
-        account.setIsActiveFlag(false); 
+        account.setIsActiveFlag(false);
+        return accountRepository.save(account);
+    }
+
+    // unblocks account
+    @Override
+    @Transactional
+    public Account unblockAccount(Long accountId) {
+        Account account = accountRepository.findById(accountId)
+            .orElseThrow(() -> new IllegalArgumentException("Account not found."));
+
+        if (account.getIsActiveFlag()) {
+             throw new IllegalStateException("Account is already active.");
+        }
+
+        account.setIsActiveFlag(true);
         return accountRepository.save(account);
     }
 
     // transaction history
     @Override
     public List<Transaction> getStatement(Long accountId) {
-     return transactionRepository.findByAccountIdAccountOrderByTransactionDateDesc(accountId);
+     return transactionRepository.findByAccount_IdAccountOrderByTransactionDateDesc(accountId);
     }
 
 }

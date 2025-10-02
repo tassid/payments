@@ -23,6 +23,9 @@ public interface AccountService {
     // block account
     Account blockAccount(Long accountId);
 
+    // unblock account
+    Account unblockAccount(Long accountId);
+
     // get transaction statement
     List<Transaction> getStatement(Long accountId);
     

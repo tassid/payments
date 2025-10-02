@@ -1,19 +1,21 @@
-version: '3.8'
-
 services:
-  # sql server
   db:
-    image: mcr.microsoft.com/mssql/server:2019-latest
-    container_name: sqlserver_payments_db
+    image: postgres:16-alpine
+    container_name: postgres_payments_db
     environment:
-      SA_PASSWORD: "Password!123" 
-      ACCEPT_EULA: "Y"
+      POSTGRES_DB: payments_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: Password!123
     ports:
-      - "1433:1433"
+      - "5432:5432"
     volumes:
-      - sqlserver_data:/var/opt/mssql # peristencia de dados
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
 
-  # backend spring boot
   backend:
     build: 
       context: ./
@@ -22,14 +24,14 @@ services:
     ports:
       - "8080:8080"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:sqlserver://db:1433;databaseName=payments_db;encrypt=true;trustServerCertificate=true;
-      
-      SPRING_DATASOURCE_USERNAME: sa 
-      SPRING_DATASOURCE_PASSWORD: "Password!123"
-      SPRING_JPA_HIBERNATE_DDL_AUTO: none
-      
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/payments_db
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: Password!123
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_JPA_DATABASE_PLATFORM: org.hibernate.dialect.PostgreSQLDialect
     depends_on:
-      - db
+      db:
+        condition: service_healthy
 
 volumes:
-  sqlserver_data: {}
+  postgres_data: {}

@@ -3,6 +3,8 @@ package com.tassi.payments.model;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -31,6 +33,7 @@ public class Account {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_person", nullable = false)
+    @JsonIgnore
     private Person person; 
 
     @Column(name = "balance", nullable = false, precision = 18, scale = 2)

@@ -11,6 +11,6 @@ import com.tassi.payments.model.Transaction;
 @Repository
 public interface TransactionRepository extends JpaRepository<Transaction, Long> {
 
-    List<Transaction> findByAccountIdAccountOrderByTransactionDateDesc(Long accountId);
+    List<Transaction> findByAccount_IdAccountOrderByTransactionDateDesc(Long accountId);
 
 }
